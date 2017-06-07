@@ -1,0 +1,68 @@
+<%
+	//Use the global "post" to get the current page object (containing page title, page content ...).
+
+	var parent = TemplateTags.getPageParent();
+	var next_page = TemplateTags.getNextPage();
+	var previous_page = TemplateTags.getPreviousPage();
+	var siblings = TemplateTags.getPageSiblings();
+	var sub_pages = TemplateTags.getPageChildren();
+	var page_depth = TemplateTags.getPageDepth();
+	var ariane = TemplateTags.getPageBreadcrumb();
+%>
+
+<script type="text/javascript" src="https://appampas.es/wp-content/themes-wp-appkit/02-IEBSFORMACION/app.js"></script>
+
+<% if( page_depth > 0 ){ %>
+	<div class="btn-group btn-group-justified">
+	  <div class="btn-group">
+	  	<% if( previous_page ){ %>
+	    	<a class="btn btn-default" href="<%= TemplateTags.getPageLink(previous_page.id) %>">Anterior</a>
+	    <% }else{ %>
+	    	<a class="btn btn-default" href="#" disabled="disabled">Anterior</a>
+	    <% } %>
+	  </div>
+	  <div class="btn-group">
+	  	<% if( parent ){ %>
+	    	<a class="btn btn-default" href="<%= TemplateTags.getPageLink(parent.id) %>">Inicio</a>
+	    <% }else{ %>
+	    	<a class="btn btn-default" href="#" disabled="disabled">Inicio</a>
+	    <% } %>
+	  </div>
+	  <div class="btn-group">
+	  	<% if( next_page ){ %>
+	    	<a class="btn btn-default" href="<%= TemplateTags.getPageLink(next_page.id) %>">Siguiente</a>
+	    <% }else{ %>
+	    	<a class="btn btn-default" href="#" disabled="disabled">Siguiente</a>
+	    <% } %>
+	  </div>
+	</div>
+
+<% } %>
+
+
+<% if( ariane.length ){ %>
+	<ol class="breadcrumb">
+		<% _.each( ariane, function(page){ %>
+			<li><a href="<%= TemplateTags.getPageLink(page.id) %>"><%= page.title %></a></li>
+		<% }); %>
+	  	<li class="active"><%= post.title %></li>
+	</ol>
+<% } %>
+<h1 class="<% print(parent ? 'with-parent' : '') %>" style="display:none;"><%= post.title %></h1>
+
+<div class="page-content">
+<%= post.my_meta %>
+	<%= post.content %>
+</div>
+
+<% if( sub_pages.length ){ %>
+	<div class="list-group related-pages">
+		<% _.each( sub_pages, function(page){ %>
+		<div class="col-xs-12">
+			<a href="<%= TemplateTags.getPageLink(page.id) %>" class="list-group-item"><img class="imagen-listado" src="<%= page.thumbnail.src %>" /></a>
+		</div>	
+		<% }); %>
+	</div>
+<% } %>
+
+
